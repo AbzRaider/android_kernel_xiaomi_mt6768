@@ -1179,7 +1179,7 @@ config CMDLINE_FROM_BOOTLOADER
 	help
 	  Uses the command-line options passed by the boot loader. If
 	  the boot loader doesn't provide any, the default kernel command
-	  string provided in CMDLINE will be used.
+  string provided in CMDLINE will be used.
 
 config CMDLINE_EXTEND
 	bool "Extend bootloader kernel arguments"
@@ -1270,6 +1270,16 @@ config BUILD_ARM64_APPENDED_DTB_IMAGE_NAMES
 	help
 	  Space separated list of names of dtbs to append when
 	  building a concatenated Image.gz-dtb.
+
+config BUILD_ARM64_DTB_OVERLAY_IMAGE
+	bool "Build a device tree overlay image"
+	depends on OF
+	help
+	  Enabling this option will casue overlay device tree
+	  to be built by default.
+	  Overlay DT contains device-specific configurations.
+	  Please be aware that bootloader supports DT merging.
+
 
 config BUILD_ARM64_DTB_OVERLAY_IMAGE_NAMES
 	string "Default dtb overlay names"
