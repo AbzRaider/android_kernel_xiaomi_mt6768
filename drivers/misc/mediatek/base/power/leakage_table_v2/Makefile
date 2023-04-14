@@ -99,4 +99,4 @@ obj-$(CONFIG_MACH_MT8168) += mtk_static_power.o
 
 obj-$(CONFIG_MACH_MT8168) += mtk_static_power_mt8168.o
 
-ccflags-y += -Wno-maybe-uninitialized
+ccflags-y += -Wno-uninitialized
