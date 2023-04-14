@@ -58,7 +58,7 @@
 #endif
 #include "fpsgo_ko.h"
 
-#line __LINE__ "vendor/mediatek/kernel_modules/fpsgo_cus/src/fpsgo_main.c"
+#line __LINE__ "$(srctree)/drivers/misc/mediatek/performance/fpsgo_v3/fpsgo_cus/src/fpsgo_main.c"
 
 static void __exit fpsgo_exit(void) {}
 
