@@ -18,7 +18,7 @@ echo "Kernel OUT Directory Not Found . Making Again"
 mkdir out
 fi
 
-make O=out ARCH=arm64 shiva_defconfig
+make O=out ARCH=arm64 lancelot_defconfig
 
 PATH="${PWD}/clang/bin:${PATH}:${PWD}/los-4.9-32/bin:${PATH}:${PWD}/los-4.9-64/bin:${PATH}" \
 make -j$(nproc --all) O=out \
@@ -42,7 +42,7 @@ git clone --depth=1 https://github.com/AbzRaider/AnyKernel33 -b xm6768 AnyKernel
 cp out/arch/arm64/boot/Image.gz-dtb AnyKernel
 cd AnyKernel
 zip -r9 Test-OSS-KERNEL-XM6768-R.zip *
-curl -F "Test-OSS-KERNEL-XM6768-R.zip " https://api.anonfiles.com/upload
+curl --upload-file "Test-OSS-KERNEL-XM6768-R.zip" https://free.keep.sh
 }
 compile
 zupload
