@@ -29,7 +29,7 @@ obj-$(CONFIG_MTK_EARA_AI) += eara_job/
 
 obj-y += fbt/
 obj-y += fstb/
-obj-y += fpsgo_cus/
+#obj-y += fpsgo_cus/
 ccflags-y += \
         -I$(srctree)/include/ \
         -I$(MTK_TOP)/include/ \
