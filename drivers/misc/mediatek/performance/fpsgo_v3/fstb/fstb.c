@@ -61,14 +61,14 @@
 
 
 static struct kobject *fstb_kobj;
-static int max_fps_limit = DEFAULT_DFPS;
+static int max_fps_limit = 61;
 static int dfps_ceiling = DEFAULT_DFPS;
-static int min_fps_limit = CFG_MIN_FPS_LIMIT;
+static int min_fps_limit = 48;
 static int fps_error_threshold = 10;
-static int QUANTILE = 50;
+static int QUANTILE = 60;
 static long long FRAME_TIME_WINDOW_SIZE_US = 1000000;
-static long long ADJUST_INTERVAL_US = 1000000;
-static int margin_mode;
+static long long ADJUST_INTERVAL_US = 900000;
+static int margin_mode=1;
 static int margin_mode_dbnc_a = 9;
 static int margin_mode_dbnc_b = 1;
 static int JUMP_CHECK_NUM = DEFAULT_JUMP_CHECK_NUM;
@@ -85,7 +85,7 @@ static struct workqueue_struct *wq;
 static struct fps_level fps_levels[MAX_NR_FPS_LEVELS];
 static int nr_fps_levels = MAX_NR_FPS_LEVELS;
 
-static int fstb_fps_klog_on;
+static int fstb_fps_klog_on=0;
 static int fstb_enable, fstb_active, fstb_idle_cnt;
 static long long last_update_ts;
 
