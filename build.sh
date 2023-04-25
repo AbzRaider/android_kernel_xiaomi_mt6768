@@ -34,7 +34,7 @@ make -j$(nproc --all) O=out \
 			          NM=llvm-nm \
 			          OBJCOPY=llvm-objcopy \
 				  OBJDUMP=llvm-objdump \
-                      CONFIG_NO_ERROR_ON_MISMATCH=y
+                      CONFIG_NO_ERROR_ON_MISMATCH=y 2>&1 | tee error.log 
 }
 
 function zupload()
