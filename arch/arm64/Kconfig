@@ -1179,7 +1179,7 @@ config CMDLINE_FROM_BOOTLOADER
 	help
 	  Uses the command-line options passed by the boot loader. If
 	  the boot loader doesn't provide any, the default kernel command
-  string provided in CMDLINE will be used.
+           string provided in CMDLINE will be used.
 
 config CMDLINE_EXTEND
 	bool "Extend bootloader kernel arguments"
