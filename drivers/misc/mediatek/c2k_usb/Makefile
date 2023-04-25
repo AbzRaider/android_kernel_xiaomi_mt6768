@@ -11,7 +11,13 @@
 # GNU General Public License for more details.
 #
 
+subdir-ccflags-y += -Wno-error
 
+ccflags-y += \
+        -Wno-unused-variable \
+        -Wno-unused-function \
+         -Wno-implicit-function-declaration \
+	 -Wno-single-bit-bitfield-constant-conversion
 ifeq ($(CONFIG_MTK_ECCCI_C2K), y)
 
 #ccflags-y += -DC2K_USB_UT
