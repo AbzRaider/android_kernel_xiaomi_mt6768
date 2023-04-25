@@ -9,7 +9,7 @@ ccache -M 100G
 export ARCH=arm64
 export KBUILD_BUILD_HOST=MARKxDEVS
 export KBUILD_BUILD_USER="AbzRaider"
-git clone --depth=1 https://gitlab.com/Panchajanya1999/azure-clang.git  clang
+git clone --depth=1  https://gitlab.com/LeCmnGend/proton-clang.git -b clang-16  clang
 
 
 
@@ -28,7 +28,7 @@ make -j$(nproc --all) O=out \
                       CROSS_COMPILE="${PWD}/clang/bin/aarch64-linux-gnu-" \
                       CROSS_COMPILE_ARM32="${PWD}/clang/bin/arm-linux-gnueabi-" \
 		      LD=ld.lld \
-
+                      STRIP=llvm-strip
                       AS=llvm-as \
 		              AR=llvm-ar \
 			          NM=llvm-nm \
