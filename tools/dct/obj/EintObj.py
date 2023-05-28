@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2016 MediaTek Inc.
@@ -16,7 +16,7 @@ import re
 import os
 import string
 
-import configparser
+import ConfigParser
 import xml.dom.minidom
 
 from data.EintData import EintData
@@ -43,7 +43,7 @@ class EintObj(ModuleObj):
 
         for node in nodes:
             if node.nodeType == xml.dom.Node.ELEMENT_NODE:
-                if node.nodeName == 'count':
+                if cmp(node.nodeName, 'count') == 0:
                     self.__count = node.childNodes[0].nodeValue
                     continue
 
@@ -84,7 +84,7 @@ class EintObj(ModuleObj):
         ModuleObj.gen_spec(self, para)
 
     def get_cfgInfo(self):
-        cp = configparser.ConfigParser(allow_no_value=True, strict=False)
+        cp = ConfigParser.ConfigParser(allow_no_value=True)
         cp.read(ModuleObj.get_figPath())
 
         ops = cp.options('GPIO')
@@ -94,14 +94,14 @@ class EintObj(ModuleObj):
             value = cp.get('GPIO', op)
             list = re.split(r' +|\t+', value)
 
-            map[int(re.findall(r'\d+', op)[0])] = int(list[len(list)-2])
+            map[string.atoi(re.findall(r'\d+', op)[0])] = string.atoi(list[len(list)-2])
             mode_map[op] = list[0:len(list)-2]
 
         EintData.set_mapTable(map)
         EintData.set_modeMap(mode_map)
 
         if cp.has_option('EINT', 'EINT_MAP_COUNT'):
-            self.__map_count = int(cp.get('EINT', 'EINT_MAP_COUNT'))
+            self.__map_count = string.atoi(cp.get('EINT', 'EINT_MAP_COUNT'))
 
         if cp.has_option('EINT', 'INTERNAL_EINT'):
             info = cp.get('EINT', 'INTERNAL_EINT')
@@ -161,21 +161,21 @@ class EintObj(ModuleObj):
             polarity = value.get_polarity()
             sensitive = value.get_sensitiveLevel()
 
-            if polarity == 'High' and sensitive == 'Edge':
+            if cmp(polarity, 'High') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'CUST_EINTF_TRIGGER_RISING'
-            elif polarity == 'Low' and sensitive == 'Edge':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'CUST_EINTF_TRIGGER_FALLING'
-            elif polarity == 'High' and sensitive == 'Level':
+            elif cmp(polarity, 'High') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'CUST_EINTF_TRIGGER_HIGH'
-            elif polarity == 'Low' and sensitive == 'Level':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'CUST_EINTF_TRIGGER_LOW'
 
             gen_str += '''#define CUST_EINT_%s_TYPE\t\t\t%s\n''' %(value.get_varName().upper(), temp)
 
             temp = ''
-            if value.get_debounceEnable() == 'Disable':
+            if cmp(value.get_debounceEnable(), 'Disable') == 0:
                 temp = 'CUST_EINT_DEBOUNCE_DISABLE'
-            elif value.get_debounceEnable() == 'Enable':
+            elif cmp(value.get_debounceEnable(), 'Enable') == 0:
                 temp = 'CUST_EINT_DEBOUNCE_ENABLE'
             gen_str += '''#define CUST_EINT_%s_DEBOUNCE_EN\t\t%s\n\n''' %(value.get_varName().upper(), temp)
 
@@ -191,7 +191,7 @@ class EintObj(ModuleObj):
         count = 0
 
         if self.__map_count == 0:
-            for i in range(0, int(self.__count)):
+            for i in range(0, string.atoi(self.__count)):
                 if EintData.get_gpioNum(i) >= 0:
                     count += 1
             count += len(EintData._int_eint)
@@ -236,7 +236,7 @@ class EintObj(ModuleObj):
 
     def get_gpioNum(self, eint_num):
         for (key, value) in EintData.get_mapTable().items():
-            if eint_num == value:
+            if cmp(eint_num, value) == 0:
                 return key
 
         return -1
@@ -245,23 +245,23 @@ class EintObj(ModuleObj):
         gpio_vec= []
 
         for key in EintData._builtin_map.keys():
-            if int(eint_num) == int(key):
+            if string.atoi(eint_num) == string.atoi(key):
                 temp_map = EintData._builtin_map[key]
                 for key in temp_map.keys():
                     gpio_vec.append(key)
 
                 if flag:
                     for item in temp_map.keys():
-                        item_data = self.__gpio_obj.get_gpioData(int(item))
+                        item_data = self.__gpio_obj.get_gpioData(string.atoi(item))
 
-                        if item_data.get_defMode() == int(temp_map[item].split(':')[0]):
+                        if item_data.get_defMode() == string.atoi(temp_map[item].split(':')[0]):
                             gpio_vec = []
                             gpio_vec.append(item)
                             return gpio_vec
 
                 break
 
-        gpio_num = EintData.get_gpioNum(int(eint_num))
+        gpio_num = EintData.get_gpioNum(string.atoi(eint_num))
         if gpio_num >= 0:
             gpio_vec.append(gpio_num)
             if flag:
@@ -291,17 +291,17 @@ class EintObj(ModuleObj):
             polarity = value.get_polarity()
             sensitive = value.get_sensitiveLevel()
 
-            if polarity == 'High' and sensitive == 'Edge':
+            if cmp(polarity, 'High') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'IRQ_TYPE_EDGE_RISING'
-            elif polarity == 'Low' and sensitive == 'Edge':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'IRQ_TYPE_EDGE_FALLING'
-            elif polarity == 'High' and sensitive == 'Level':
+            elif cmp(polarity, 'High') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'IRQ_TYPE_LEVEL_HIGH'
-            elif polarity == 'Low' and sensitive == 'Level':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'IRQ_TYPE_LEVEL_LOW'
 
             gen_str += '''\tinterrupts = <%s %s>;\n''' %(self.refGpio(key[4:], True)[0], temp)
-            gen_str += '''\tdebounce = <%s %d>;\n''' %(self.refGpio(key[4:], True)[0], int(value.get_debounceTime()) * 1000)
+            gen_str += '''\tdebounce = <%s %d>;\n''' %(self.refGpio(key[4:], True)[0], string.atoi(value.get_debounceTime()) * 1000)
             gen_str += '''\tstatus = \"okay\";\n'''
             gen_str += '''};\n'''
             gen_str += '''\n'''
@@ -349,19 +349,19 @@ class EintObj_MT6739(EintObj):
             polarity = value.get_polarity()
             sensitive = value.get_sensitiveLevel()
 
-            if polarity == 'High' and sensitive == 'Edge':
+            if cmp(polarity, 'High') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'IRQ_TYPE_EDGE_RISING'
-            elif polarity == 'Low' and sensitive == 'Edge':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Edge') == 0:
                 temp = 'IRQ_TYPE_EDGE_FALLING'
-            elif polarity == 'High' and sensitive == 'Level':
+            elif cmp(polarity, 'High') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'IRQ_TYPE_LEVEL_HIGH'
-            elif polarity == 'Low' and sensitive == 'Level':
+            elif cmp(polarity, 'Low') == 0 and cmp(sensitive, 'Level') == 0:
                 temp = 'IRQ_TYPE_LEVEL_LOW'
 
             gen_str += '''\tinterrupts = <%s %s %s %d>;\n''' % (key[4:], temp, self.refGpio(key[4:], True)[0], self.refGpio_defMode(key[4:], True))
-            if value.get_debounceEnable() == 'Enable':
+            if cmp(value.get_debounceEnable(), 'Enable') == 0:
                 gen_str += '''\tdeb-gpios = <&pio %s 0>;\n''' % (self.refGpio(key[4:], True)[0])
-                gen_str += '''\tdebounce = <%d>;\n''' % (int(value.get_debounceTime()) * 1000)
+                gen_str += '''\tdebounce = <%d>;\n''' % (string.atoi(value.get_debounceTime()) * 1000)
             gen_str += '''\tstatus = \"okay\";\n'''
             gen_str += '''};\n'''
             gen_str += '''\n'''
@@ -375,20 +375,20 @@ class EintObj_MT6739(EintObj):
         refGpio_defMode = 0
 
         for key in EintData._builtin_map.keys():
-            if int(eint_num) == int(key):
+            if string.atoi(eint_num) == string.atoi(key):
                 temp_map = EintData._builtin_map[key]
 
                 if flag:
                     for item in temp_map.keys():
-                        item_data = self.get_gpioObj().get_gpioData(int(item))
+                        item_data = self.get_gpioObj().get_gpioData(string.atoi(item))
 
-                        if item_data.get_defMode() == int(temp_map[item].split(':')[0]):
+                        if item_data.get_defMode() == string.atoi(temp_map[item].split(':')[0]):
                             refGpio_defMode = item_data.get_defMode()
                             return refGpio_defMode
 
                 break
 
-        gpio_num = EintData.get_gpioNum(int(eint_num))
+        gpio_num = EintData.get_gpioNum(string.atoi(eint_num))
         if gpio_num >= 0:
             if flag:
                 item_data = self.get_gpioObj().get_gpioData(gpio_num)

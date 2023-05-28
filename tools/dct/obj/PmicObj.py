@@ -1,4 +1,4 @@
-#! /usr/bin/python3
+#! /usr/bin/python
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2016 MediaTek Inc.
@@ -14,10 +14,10 @@
 
 import sys, os
 import re
-import configparser
+import ConfigParser
 import xml.dom.minidom
 
-from obj.ModuleObj import ModuleObj
+from ModuleObj import ModuleObj
 from data.PmicData import PmicData
 
 from utility.util import log
@@ -39,7 +39,7 @@ class PmicObj(ModuleObj):
 
 
     def get_cfgInfo(self):
-        cp = configparser.ConfigParser(allow_no_value=True, strict=False)
+        cp = ConfigParser.ConfigParser(allow_no_value=True)
         cp.read(ModuleObj.get_cmpPath())
 
         PmicData._var_list = cp.options('APPLICATION')
@@ -70,12 +70,12 @@ class PmicObj(ModuleObj):
         nodes = node.childNodes
         for node in nodes:
             if node.nodeType == xml.dom.Node.ELEMENT_NODE:
-                if node.nodeName == 'chip':
+                if cmp(node.nodeName, 'chip') == 0:
                     if len(node.childNodes) == 0:
                        break
                     self.__chipName = node.childNodes[0].nodeValue
                     continue
-                if node.nodeName == 'count':
+                if cmp(node.nodeName, 'count') == 0:
                     continue
                 ldoNode = node.getElementsByTagName('ldoVar')
                 defNode = node.getElementsByTagName('defEn')
@@ -86,9 +86,9 @@ class PmicObj(ModuleObj):
 
                 if len(defNode):
                     number = -1
-                    if defNode[0].childNodes[0].nodeValue == 'SKIP':
+                    if cmp(defNode[0].childNodes[0].nodeValue, 'SKIP') == 0:
                         number = 0
-                    elif defNode[0].childNodes[0].nodeValue == 'OFF':
+                    elif cmp(defNode[0].childNodes[0].nodeValue, 'OFF') == 0:
                         number = 1
                     else:
                         number = 2
