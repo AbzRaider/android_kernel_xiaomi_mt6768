@@ -1,4 +1,11 @@
 #!/bin/bash
+function setuptools()
+{
+mkdir clang && cd clang
+bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
+sudo apt install libelf-dev libarchive-tools
+bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) --patch=glibc
+}
 
 function compile() 
 {
@@ -9,10 +16,7 @@ ccache -M 100G
 export ARCH=arm64
 export KBUILD_BUILD_HOST=MARKxDEVS
 export KBUILD_BUILD_USER="AbzRaider"
-mkdir clang && cd clang
-bash <(curl -s https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman) -S=latest
-sudo apt install libelf-dev libarchive-tools
-bash -c "$(wget -O - https://gist.githubusercontent.com/dakkshesh07/240736992abf0ea6f0ee1d8acb57a400/raw/e97b505653b123b586fc09fda90c4076c8030732/patch-for-old-glibc.sh)"
+
 
 
 
@@ -48,5 +52,14 @@ cd AnyKernel
 zip -r9 Test-OSS-KERNEL-XM6768-R.zip *
 curl --upload-file "Test-OSS-KERNEL-XM6768-R.zip" https://free.keep.sh
 }
+
+#Install Toolchain
+if ! [ -d "out" ]; then
+setuptools
+fi
+
+#Compile Kernel
 compile
+
+# Upload the kernel to file hosting website
 zupload
